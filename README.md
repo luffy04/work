@@ -1,0 +1,1 @@
+# stayrific-react-native
