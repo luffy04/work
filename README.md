@@ -33,5 +33,6 @@
 
 ## Food delivery features
 
+- Sign in as food delivery person
 - Show list of students which ordered food
 - Scan their QR code and update food delivered
