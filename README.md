@@ -30,9 +30,3 @@
 - Select if college food needed
 - Show QR code for food delivery scan
 - Request guest access
-
-## Food delivery features
-
-- Sign in as food delivery person
-- Show list of students which ordered food
-- Scan their QR code and update food delivered
