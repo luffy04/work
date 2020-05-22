@@ -6,16 +6,62 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { materialTheme } from '../constants/';
 import { HeaderHeight } from "../constants/utils";
 
+import firebase from "firebase";
+
+import 'firebase/firestore';
+import { resolve } from 'url';
+import { reject } from 'q';
+import { callbackify } from 'util';
+
 const { width } = Dimensions.get('window');
+
+
 
 export default class SignIn extends React.Component {
   state = {
-    email: '-',
-    password: '-',
+    email: "anujjha041998@gmail.com",
+    password: "123456",
     active: {
       email: false,
-      password: false,
+      password: false,  
+    },
+    user:[]
+  }
+
+  componentDidMount=()=>{
+    const firebaseConfig = {
+      apiKey: "AIzaSyDBPH2z33ieZyn9o-TZjYeHLYPcXi4lyqc",
+      authDomain: "stayrific-app.firebaseapp.com",
+      databaseURL: "https://stayrific-app.firebaseio.com",
+      projectId: "stayrific-app",
+      storageBucket: "stayrific-app.appspot.com",
+      messagingSenderId: "374724684436",
+      appId: "1:374724684436:web:d035c3ed44067279cea281"
+    };
+  
+    firebase.initializeApp(firebaseConfig);
+    // db.settings({timestampsInSnapshots:true});
+  }
+
+  setUser=async (uid)=>{
+    var citiesRef = db.collection('cities');
+    try {
+        var allCitiesSnapShot = await citiesRef.get();
+        allCitiesSnapShot.forEach(doc => {
+            console.log(doc.id, '=>', doc.data().name);
+        });
+        console.log("end")
     }
+    catch (err) {
+        console.log('Error getting documents', err);
+    }
+  }
+
+  signInFirebase= async ()=>{
+    firebase
+    .auth()
+    .signInWithEmailAndPassword(this.state.email,this.state.password)
+    .then((result)=> this.setUser(result.user.uid))
   }
 
   handleChange = (name, value) => {
@@ -98,6 +144,7 @@ export default class SignIn extends React.Component {
                 <Input
                   borderless
                   color="white"
+                  value={this.state.email}
                   placeholder="Email"
                   type="email-address"
                   autoCapitalize="none"
@@ -112,6 +159,7 @@ export default class SignIn extends React.Component {
                   password
                   viewPass
                   borderless
+                  value={this.state.password}
                   color="white"
                   iconColor="white"
                   placeholder="Password"
@@ -136,7 +184,7 @@ export default class SignIn extends React.Component {
                   shadowless
                   color={materialTheme.COLORS.BUTTON_COLOR}
                   style={{ height: 48 }}
-                  onPress={() => Alert.alert('Sign in action',`Email: ${email} Password: ${password}`,)}
+                  onPress={this.signInFirebase}
                 >
                   SIGN IN
                 </Button>
